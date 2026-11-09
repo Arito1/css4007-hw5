@@ -1,0 +1,21 @@
+{
+  "ticket": {
+    "ticket_id": "TCK-20261109-201116-B07124",
+    "status": "draft",
+    "user_id": "demo-user-a",
+    "thread_id": "refer-a",
+    "category": "wifi",
+    "summary": "User cannot connect to Wi-Fi.",
+    "steps_tried": [
+      "Checked that Wi-Fi is enabled and airplane mode is off.",
+      "Selected the Campus-Demo network.",
+      "Forgot the saved network and tried connecting again."
+    ],
+    "service_status": "operational",
+    "status_profile": "normal",
+    "reference_ids": [
+      "GUIDE-WIFI"
+    ]
+  },
+  "delivery": "local draft only, not sent"
+}

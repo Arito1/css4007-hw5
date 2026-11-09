@@ -1,0 +1,189 @@
+{
+  "scenario": "S11",
+  "title": "Persist and recall after restart",
+  "part": 3,
+  "command": "python -m helpdesk scenarios --model anthropic",
+  "status_profile": "normal",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 25544,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "restart-a",
+        "checkpoint_thread_id": "demo-user-a::restart-a",
+        "status_profile": "normal",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "Please remember that I prefer replies in Kazakh. My issue is Wi-Fi. I enabled it and tried reconnecting, but it still fails.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "save_user_preference",
+              "find_instructions"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "save_user_preference",
+              "find_instructions"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "Мен енді сізге қазақ тілінде жауап беретін боламын.\n\nWi-Fi нұсқаулығынан (GUIDE-WIFI) сіз әлі жасамаған қадамдар:\n1. «Check that Wi-Fi is enabled and airplane mode is off.» Ұшақ режимі өшірулі екенін тексеріңіз.\n2. «Select the fictional Campus-Demo network.» Campus-Demo желісін таңдаңыз.\n3. «If connection fails, forget the saved network and try connecting again.» Сақталған желіні ұмыттырып (forget), қайта қосылып көріңіз.\n4. «If the problem remains, check the service status before preparing a ticket.» Мәселе шешілмесе, өтінім жобасын жасамас бұрын сервис күйін тексеру керек.\n\nМәселе әлі де болса, айтыңыз. Мен Wi-Fi күйін тексеремін, сосын қаласаңыз жергілікті өтінім жобасын жасаймын."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "save_user_preference",
+            "args": {
+              "language": "Kazakh"
+            }
+          },
+          {
+            "round": 1,
+            "tool": "find_instructions",
+            "args": {
+              "topic": "wifi"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "save_user_preference",
+            "result": {
+              "saved": true,
+              "user_memory": {
+                "language": "Kazakh"
+              }
+            }
+          },
+          {
+            "tool": "find_instructions",
+            "result": {
+              "found": true,
+              "topic": "wifi",
+              "instruction_id": "GUIDE-WIFI",
+              "title": "Connect to the practice campus network",
+              "steps": [
+                "Check that Wi-Fi is enabled and airplane mode is off.",
+                "Select the fictional Campus-Demo network.",
+                "If connection fails, forget the saved network and try connecting again.",
+                "If the problem remains, check the service status before preparing a ticket."
+              ],
+              "source": "data/helpdesk.json#GUIDE-WIFI"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [
+            "data/helpdesk.json#GUIDE-WIFI"
+          ],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": [
+            {
+              "language": "Kazakh"
+            }
+          ]
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 6,
+        "reply": "Мен енді сізге қазақ тілінде жауап беретін боламын.\n\nWi-Fi нұсқаулығынан (GUIDE-WIFI) сіз әлі жасамаған қадамдар:\n1. «Check that Wi-Fi is enabled and airplane mode is off.» Ұшақ режимі өшірулі екенін тексеріңіз.\n2. «Select the fictional Campus-Demo network.» Campus-Demo желісін таңдаңыз.\n3. «If connection fails, forget the saved network and try connecting again.» Сақталған желіні ұмыттырып (forget), қайта қосылып көріңіз.\n4. «If the problem remains, check the service status before preparing a ticket.» Мәселе шешілмесе, өтінім жобасын жасамас бұрын сервис күйін тексеру керек.\n\nМәселе әлі де болса, айтыңыз. Мен Wi-Fi күйін тексеремін, сосын қаласаңыз жергілікті өтінім жобасын жасаймын."
+      }
+    },
+    {
+      "action": "restart_process",
+      "preserve_local_storage": true,
+      "previous_pid": 25544,
+      "next_pid": 13824
+    },
+    {
+      "action": "message",
+      "process_pid": 13824,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "restart-a",
+        "checkpoint_thread_id": "demo-user-a::restart-a",
+        "status_profile": "normal",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "Which problem and steps did we discuss?",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 6,
+          "earlier_user_messages": [
+            "Please remember that I prefer replies in Kazakh. My issue is Wi-Fi. I enabled it and tried reconnecting, but it still fails."
+          ]
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {
+                "language": "Kazakh"
+              },
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "final_answer": "Біз Wi-Fi мәселесін талқыладық. Сіз Wi-Fi-ды қосып, қайта қосылып көрдіңіз, бірақ бәрібір қосыла алмадыңыз.\n\nМен GUIDE-WIFI нұсқаулығынан мына қадамдарды ұсындым:\n1. Ұшақ режимі өшірулі екенін тексеру.\n2. Campus-Demo желісін таңдау.\n3. Сақталған желіні ұмыттырып (forget), қайта қосылу.\n4. Мәселе шешілмесе, өтінім жобасын жасамас бұрын сервис күйін тексеру.\n\nСервис күйі әлі тексерілген жоқ."
+          }
+        ],
+        "model_tool_requests": [],
+        "tool_results": [],
+        "sources": {
+          "reference_file": [],
+          "service_status": [],
+          "user_memory_read": {
+            "language": "Kazakh"
+          },
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 0,
+        "messages_in_checkpoint_after": 9,
+        "reply": "Біз Wi-Fi мәселесін талқыладық. Сіз Wi-Fi-ды қосып, қайта қосылып көрдіңіз, бірақ бәрібір қосыла алмадыңыз.\n\nМен GUIDE-WIFI нұсқаулығынан мына қадамдарды ұсындым:\n1. Ұшақ режимі өшірулі екенін тексеру.\n2. Campus-Demo желісін таңдау.\n3. Сақталған желіні ұмыттырып (forget), қайта қосылу.\n4. Мәселе шешілмесе, өтінім жобасын жасамас бұрын сервис күйін тексеру.\n\nСервис күйі әлі тексерілген жоқ."
+      }
+    }
+  ],
+  "final_reply": "Біз Wi-Fi мәселесін талқыладық. Сіз Wi-Fi-ды қосып, қайта қосылып көрдіңіз, бірақ бәрібір қосыла алмадыңыз.\n\nМен GUIDE-WIFI нұсқаулығынан мына қадамдарды ұсындым:\n1. Ұшақ режимі өшірулі екенін тексеру.\n2. Campus-Demo желісін таңдау.\n3. Сақталған желіні ұмыттырып (forget), қайта қосылу.\n4. Мәселе шешілмесе, өтінім жобасын жасамас бұрын сервис күйін тексеру.\n\nСервис күйі әлі тексерілген жоқ.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

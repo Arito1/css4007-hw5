@@ -1,0 +1,177 @@
+{
+  "scenario": "S13",
+  "title": "Do not share memory between users",
+  "part": 3,
+  "command": "python -m helpdesk scenarios --model anthropic",
+  "status_profile": "normal",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 23804,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "isolation-a",
+        "checkpoint_thread_id": "demo-user-a::isolation-a",
+        "status_profile": "normal",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "Please remember that I prefer replies in Kazakh. I have a Wi-Fi problem.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "save_user_preference",
+              "find_instructions"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "save_user_preference",
+              "find_instructions"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "Енді сізге қазақ тілінде жауап беремін, бұл қалауыңызды сақтап қойдым.\n\nWi-Fi нұсқаулығы (GUIDE-WIFI):\n1. Wi-Fi қосулы екенін және ұшақ режимі өшірулі екенін тексеріңіз.\n2. Campus-Demo желісін таңдаңыз.\n3. Қосылмаса, сақталған желіні ұмытып (forget), қайта қосылып көріңіз.\n4. Мәселе шешілмесе, өтінім (ticket) жасамас бұрын қызмет күйін тексеру керек.\n\nҚызмет күйін тексеріп берейін бе? Өтінім жобасын жасау керек болса, мәселені толығырақ сипаттап, қандай қадамдарды жасап көргеніңізді жазыңыз."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "save_user_preference",
+            "args": {
+              "language": "Kazakh"
+            }
+          },
+          {
+            "round": 1,
+            "tool": "find_instructions",
+            "args": {
+              "topic": "wifi"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "save_user_preference",
+            "result": {
+              "saved": true,
+              "user_memory": {
+                "language": "Kazakh"
+              }
+            }
+          },
+          {
+            "tool": "find_instructions",
+            "result": {
+              "found": true,
+              "topic": "wifi",
+              "instruction_id": "GUIDE-WIFI",
+              "title": "Connect to the practice campus network",
+              "steps": [
+                "Check that Wi-Fi is enabled and airplane mode is off.",
+                "Select the fictional Campus-Demo network.",
+                "If connection fails, forget the saved network and try connecting again.",
+                "If the problem remains, check the service status before preparing a ticket."
+              ],
+              "source": "data/helpdesk.json#GUIDE-WIFI"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [
+            "data/helpdesk.json#GUIDE-WIFI"
+          ],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": [
+            {
+              "language": "Kazakh"
+            }
+          ]
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 6,
+        "reply": "Енді сізге қазақ тілінде жауап беремін, бұл қалауыңызды сақтап қойдым.\n\nWi-Fi нұсқаулығы (GUIDE-WIFI):\n1. Wi-Fi қосулы екенін және ұшақ режимі өшірулі екенін тексеріңіз.\n2. Campus-Demo желісін таңдаңыз.\n3. Қосылмаса, сақталған желіні ұмытып (forget), қайта қосылып көріңіз.\n4. Мәселе шешілмесе, өтінім (ticket) жасамас бұрын қызмет күйін тексеру керек.\n\nҚызмет күйін тексеріп берейін бе? Өтінім жобасын жасау керек болса, мәселені толығырақ сипаттап, қандай қадамдарды жасап көргеніңізді жазыңыз."
+      }
+    },
+    {
+      "action": "message",
+      "process_pid": 23804,
+      "trace": {
+        "user_id": "demo-user-b",
+        "thread_id": "isolation-b",
+        "checkpoint_thread_id": "demo-user-b::isolation-b",
+        "status_profile": "normal",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "Have I told you a preferred language or a previous problem?",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "final_answer": "No, you haven't told me a preferred language, and you haven't mentioned a previous problem. Your saved preferences are empty, and there are no earlier messages in this conversation.\n\nI can help with Wi-Fi or password problems. If you'd like me to remember a reply language, just ask."
+          }
+        ],
+        "model_tool_requests": [],
+        "tool_results": [],
+        "sources": {
+          "reference_file": [],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 0,
+        "messages_in_checkpoint_after": 3,
+        "reply": "No, you haven't told me a preferred language, and you haven't mentioned a previous problem. Your saved preferences are empty, and there are no earlier messages in this conversation.\n\nI can help with Wi-Fi or password problems. If you'd like me to remember a reply language, just ask."
+      }
+    }
+  ],
+  "final_reply": "No, you haven't told me a preferred language, and you haven't mentioned a previous problem. Your saved preferences are empty, and there are no earlier messages in this conversation.\n\nI can help with Wi-Fi or password problems. If you'd like me to remember a reply language, just ask.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

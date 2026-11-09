@@ -2,14 +2,14 @@
   "scenario": "S01",
   "title": "Simple Wi-Fi route",
   "part": 1,
-  "command": "python -m helpdesk scenarios --model fake",
+  "command": "python -m helpdesk scenarios --model anthropic",
   "status_profile": "normal",
   "graph_variant": "original",
   "model": "none (Part 1 has no model)",
   "events": [
     {
       "action": "message",
-      "process_pid": 15060,
+      "process_pid": 25132,
       "user_id": "demo-user-a",
       "thread_id": "s01",
       "trace": {

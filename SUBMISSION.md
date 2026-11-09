@@ -3,10 +3,13 @@
 Setup and exact commands are in [README.md](README.md). Model and provider: **Anthropic Claude
 (`claude-opus-5-5`) through `langchain-anthropic` 1.7.10**, with LangGraph 1.2.20 on Python 3.13.15.
 
-> **Status of the logs.** Part 1 logs are final: Part 1 has no model. The Part 2–3 logs in
-> `outputs/fake-model/` are an offline **dry run with a scripted fake model**. They prove the
-> graph wiring, but they are not Claude's behaviour. The real Claude run goes to `outputs/claude/`,
-> and the scenario table at the end is filled from it.
+> **Logs.**
+>
+> - `outputs/part1/`: Part 1, no model.
+> - `outputs/claude/`: the **real Claude run** (`claude-opus-5-5`) of S06–S14 and D01, made with
+>   `python -m helpdesk scenarios --model anthropic` on 10 Nov 2026. All results below come from it.
+> - `outputs/fake-model/`: the earlier offline dry run with the scripted fake model that the tests
+>   use. It is kept only to show what CI exercises; it is not Claude's behaviour.
 
 ## Part 1 — How the graph works
 
@@ -179,17 +182,30 @@ in `route_after_agent`:
 - LangGraph's `recursion_limit` (`4·limit + 10` steps) is a second safety net.
 - `test_loop_limit_stops_a_model_that_never_answers` uses a broken model that always asks for a tool.
 
-**Multi-tool run.** S06, second message: Claude should call `check_service_status` → `prepare_ticket`
-and use `GUIDE-WIFI` from the first message. Logs: `outputs/claude/S06.json` (real) and
-`outputs/fake-model/S06.json` (dry run). The ticket filename is in the log and the reply.
+**Multi-tool run: S06** ([outputs/claude/S06.json](outputs/claude/S06.json), model `claude-opus-5-5`)
 
-**Same request, different snapshot:**
+| Turn | Model requests → tool results | Route |
+| --- | --- | --- |
+| 1. "Show me the Wi-Fi troubleshooting steps." | `find_instructions({"topic":"wifi"})` → GUIDE-WIFI, 4 steps | load_user_memory → agent → tools → agent → END |
+| 2. "I enabled Wi-Fi and forgot the saved network … If it is operating, prepare a ticket …" | `check_service_status({"service":"wifi"})` → `operational`; *then* `prepare_ticket({"category":"wifi", "summary":"Campus-Demo Wi-Fi network will not connect.", "steps_tried":["Enabled Wi-Fi","Forgot the saved network"], "service_status":"operational", "reference_ids":["GUIDE-WIFI"]})` → created | load_user_memory → agent → tools → agent → tools → agent → END |
 
-| Snapshot | Scenario | Expected behaviour | Claude log |
+Final answer, turn 2 (shortened): *"Wi-Fi isn't down … Because the service is working, I made the
+ticket you asked for. It's only a draft saved on this device, and nothing was sent.
+File: `outputs/claude/tickets/TCK-20261109-200917-35DE16.json`"*. Claude made two separate model
+requests: it asked for `prepare_ticket` only *after* it had seen the `operational` result. The
+ticket contains only the two steps the user stated, and Claude took `GUIDE-WIFI` from the first turn
+(conversation memory). The loop limit was not reached.
+
+**Same request, different snapshot** (S06 second message = S07 message; S08 is a shorter variant):
+
+| Snapshot | Scenario | Tool calls | What Claude did |
 | --- | --- | --- | --- |
-| `normal` (Wi-Fi operational) | S06 | Status checked → ticket draft created, "nothing has been sent" | `outputs/claude/S06.json` |
-| `wifi_outage` | S07 | Status checked → outage reported, **no ticket**, no repair time | `outputs/claude/S07.json` |
-| `status_unavailable` | S08 | Status unknown → no ticket, asks whether to draft one saying the status could not be checked | `outputs/claude/S08.json` |
+| `normal` (operational) | [S06](outputs/claude/S06.json) | check_service_status → prepare_ticket | Ticket draft created; "nothing was sent"; file name given |
+| `wifi_outage` | [S07](outputs/claude/S07.json) | check_service_status only | "The Wi-Fi service is down … no repair time is available. You asked for a ticket only if Wi-Fi was working, so I didn't prepare one." No file created |
+| `status_unavailable` | [S08](outputs/claude/S08.json) | check_service_status only | "The status check came back unknown … That doesn't mean Wi-Fi is working, and it doesn't confirm an outage either … Do you want me to prepare a local ticket draft anyway? It would say that the status couldn't be checked …" |
+
+The graph and the prompt are identical in all three runs. Only the tool result changes, and with it
+Claude's next step: one more tool call, or a final answer.
 
 ## Part 3 — Memory
 
@@ -223,10 +239,10 @@ conversation, and it is specific to that user. It would not exist if the user ha
 
 | Situation | Command used | Log file | What happened |
 | --- | --- | --- | --- |
-| Refer to an earlier message | `python -m helpdesk scenarios --model anthropic --only D01` (or `chat --user demo-user-a --thread refer-a -m "I cannot connect to Wi-Fi." -m "I already tried that."`) | `outputs/claude/D01.json` | Claude run pending. Dry run: 2nd turn loaded 5 messages from the checkpoint and said "that" = the GUIDE-WIFI steps |
-| Close, restart and resume | `python -m helpdesk scenarios --model anthropic --only S11` | `outputs/claude/S11.json` | Claude run pending. Dry run: two processes (different PIDs); 2nd process loaded the earlier messages and answered "Wi-Fi; enabled, tried reconnecting" |
-| Same user, new conversation | `python -m helpdesk scenarios --model anthropic --only S12` | `outputs/claude/S12.json` | Claude run pending. Dry run: new thread `preference-a2` loaded 0 messages; user memory read `{"language": "Kazakh"}` |
-| Different user | `python -m helpdesk scenarios --model anthropic --only S13` | `outputs/claude/S13.json` | Claude run pending. Dry run: demo-user-b read empty user memory and 0 messages; "no preference or previous problem recorded" |
+| Refer to an earlier message | `python -m helpdesk scenarios --model anthropic --only D01` (same as `chat --user demo-user-a --thread refer-a -m "I cannot connect to Wi-Fi." -m "I already tried that."`) | [outputs/claude/D01.json](outputs/claude/D01.json) | **Conversation memory:** turn 2 loaded 6 messages from the checkpoint. Claude read "that" as the GUIDE-WIFI steps it had just listed. Its previous answer had offered a ticket ("tell me which steps you've already tried"), so it drafted one with those steps, and said: "If you didn't actually do all three steps, tell me which ones and I'll make a corrected draft." **Reference file:** GUIDE-WIFI from turn 1 |
+| Close, restart and resume | `python -m helpdesk scenarios --model anthropic --only S11` | [outputs/claude/S11.json](outputs/claude/S11.json) | Process 25544 saved the preference and answered. The program exited, and **process 13824** opened the same storage and thread. **Conversation memory:** 6 messages loaded. **User memory:** `{"language":"Kazakh"}`. Answer, in Kazakh: "Біз Wi-Fi мәселесін талқыладық. Сіз Wi-Fi-ды қосып, қайта қосылып көрдіңіз…" (we discussed Wi-Fi; you enabled it and tried reconnecting) |
+| Same user, new conversation | `python -m helpdesk scenarios --model anthropic --only S12` | [outputs/claude/S12.json](outputs/claude/S12.json) | New process and new thread `preference-a2`. **Conversation memory:** 0 messages, so no replay. **User memory:** `{"language":"Kazakh"}`. Answer: "Сіз маған қазақ тілінде жауап беруді сұрадыңыз…" (you asked me to reply in Kazakh), then the scope list, all in Kazakh |
+| Different user | `python -m helpdesk scenarios --model anthropic --only S13` | [outputs/claude/S13.json](outputs/claude/S13.json) | demo-user-a saved Kazakh. **demo-user-b:** user memory `{}`, 0 messages. Answer (English): "No, you haven't told me a preferred language, and you haven't mentioned a previous problem. Your saved preferences are empty…" |
 
 Each log has a `sources` block: `reference_file` (helpdesk.json ids), `service_status`,
 `user_memory_read`, `user_memory_written`. It also has `conversation_memory_read` (how many messages
@@ -274,12 +290,22 @@ came from the checkpoint, and the earlier user messages).
   - The fake model only understands the scenario phrasings. It cannot translate into Kazakh; it only
     marks where Claude would reply in Kazakh.
   - Every turn appends one `USER_MEMORY` system message, so long threads repeat it.
+- **Observed in the Claude run:**
+  - In D01, Claude turned the vague "I already tried that" into a ticket listing all three guide
+    steps. It said so openly and offered a correction, but it is still an assumption. **What I would
+    change:** a stricter rule that the model must ask which steps were tried before drafting a ticket
+    from a vague reference.
+  - In S11, the first reply listed all four guide steps as "steps you have not done yet", including
+    the reconnect step the user had already tried. This is a small wording slip. The resumed
+    conversation after the restart recalled the steps correctly.
+  - Claude kept the guide steps in English quotes inside Kazakh replies, because it quotes the tool
+    result word for word as the system prompt asks.
 
 ## Supplied scenarios — my actual results
 
-Part 1 rows are final. The Part 2–3 rows come from the real Claude run
-(`python -m helpdesk scenarios --model anthropic`, logs in `outputs/claude/`). That run is **still
-to be done**; until then the "dry run" notes describe the fake-model run in `outputs/fake-model/`.
+Everything was run with `python -m helpdesk scenarios --model anthropic` (model `claude-opus-5-5`).
+To run one scenario, add `--only S07`. The one-line overview is in
+[outputs/claude/SUMMARY.md](outputs/claude/SUMMARY.md). No scenario reached the loop limit.
 
 | Scenario | Command or manual steps | Log file | What happened / what I changed |
 | --- | --- | --- | --- |
@@ -288,12 +314,12 @@ to be done**; until then the "dry run" notes describe the fake-model run in `out
 | S03 — Unsupported request | `… --only S03` | `outputs/part1/S03.json` | read_request → other_help; asks "Wi-Fi or a password?" |
 | S04 — Two topics before the graph change | `… --only S04` (original graph) | `outputs/part1/S04.json` | topics = wifi+password, but category = wifi (rule order) → wifi_help. This is the problem the change fixes |
 | S05 — Two topics after adding clarification | `… --only S05` (`with_clarification`) | `outputs/part1/S05.json` | category = multiple → clarify_problem asks which problem comes first |
-| S06 — Instructions then local ticket | `python -m helpdesk scenarios --model anthropic --only S06` | `outputs/claude/S06.json` | Claude run pending. Dry run: turn 1 find_instructions; turn 2 check_service_status (operational) → prepare_ticket with the user's two steps and GUIDE-WIFI; file in `outputs/fake-model/tickets/` |
-| S07 — The same request during a Wi-Fi outage | `… --only S07` | `outputs/claude/S07.json` | Claude run pending. Dry run: check_service_status → outage; no ticket; "no repair time" |
-| S08 — Status source unavailable | `… --only S08` | `outputs/claude/S08.json` | Claude run pending. Dry run: status unknown → no ticket; asks whether to draft one |
-| S09 — Missing ticket details | `… --only S09` | `outputs/claude/S09.json` | Claude run pending. Dry run: turn 1 no tools, asks for problem and steps; turn 2 ticket with `service_status: not_checked` |
-| S10 — Use the current conversation | `… --only S10` | `outputs/claude/S10.json` | Claude run pending. Dry run: turn 2 loaded the checkpoint and listed the three steps the user wrote |
-| S11 — Persist and recall after restart | `… --only S11` (runner starts a new process at `restart_process`) | `outputs/claude/S11.json` | Claude run pending. Dry run: PIDs differ; resumed thread recalled Wi-Fi + steps; preference Kazakh applied |
-| S12 — Preference across threads without replay | `… --only S12` | `outputs/claude/S12.json` | Claude run pending. Dry run: new thread, 0 messages loaded, user memory = Kazakh |
-| S13 — Do not share memory between users | `… --only S13` | `outputs/claude/S13.json` | Claude run pending. Dry run: demo-user-b sees no preference and no problem |
-| S14 — Password recovery outage | `… --only S14` | `outputs/claude/S14.json` | Claude run pending. Dry run: check_service_status(account_recovery) → outage, no repair time invented |
+| S06 — Instructions then local ticket | `… --model anthropic --only S06` | [outputs/claude/S06.json](outputs/claude/S06.json) | Turn 1: find_instructions → GUIDE-WIFI. Turn 2: check_service_status → operational, then prepare_ticket with only the user's two steps and GUIDE-WIFI → `outputs/claude/tickets/TCK-20261109-200917-35DE16.json`, "nothing was sent" |
+| S07 — The same request during a Wi-Fi outage | `… --only S07` | [outputs/claude/S07.json](outputs/claude/S07.json) | check_service_status → outage. No ticket, "no repair time is available", and Claude explained it followed the condition |
+| S08 — Status source unavailable | `… --only S08` | [outputs/claude/S08.json](outputs/claude/S08.json) | check_service_status → unknown. "Doesn't mean Wi-Fi is working … doesn't confirm an outage". No ticket; asked whether to draft one that says the status couldn't be checked |
+| S09 — Missing ticket details | `… --only S09` | [outputs/claude/S09.json](outputs/claude/S09.json) | Turn 1: no tool call, asked for the problem and steps tried (and warned not to include passwords). Turn 2: prepare_ticket with `service_status: not_checked` and steps "Enabled Wi-Fi", "Tried reconnecting" |
+| S10 — Use the current conversation | `… --only S10` | [outputs/claude/S10.json](outputs/claude/S10.json) | Turn 2 loaded 6 messages from the checkpoint, no tools, and answered with exactly the user's steps: turned on Wi-Fi, forgot the network and reconnected |
+| S11 — Persist and recall after restart | `… --only S11` (new process at `restart_process`) | [outputs/claude/S11.json](outputs/claude/S11.json) | PID 25544 → 13824. Saved Kazakh via save_user_preference. After the restart, 6 messages + user memory loaded; recalled the Wi-Fi problem and steps, in Kazakh |
+| S12 — Preference across threads without replay | `… --only S12` | [outputs/claude/S12.json](outputs/claude/S12.json) | PID 23604 → 13940, new thread: 0 messages, user memory `{"language":"Kazakh"}`; answered in Kazakh that Kazakh was requested, plus the scope |
+| S13 — Do not share memory between users | `… --only S13` | [outputs/claude/S13.json](outputs/claude/S13.json) | demo-user-b: empty user memory, 0 messages; "you haven't told me a preferred language … or a previous problem", in English |
+| S14 — Password recovery outage | `… --only S14` | [outputs/claude/S14.json](outputs/claude/S14.json) | check_service_status(account_recovery) → outage; "status data doesn't say when it will be fixed"; offered a ticket draft without inventing details |

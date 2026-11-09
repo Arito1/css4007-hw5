@@ -1,0 +1,106 @@
+{
+  "scenario": "S08",
+  "title": "Status source unavailable",
+  "part": 2,
+  "command": "python -m helpdesk scenarios --model anthropic",
+  "status_profile": "status_unavailable",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 26480,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s08",
+        "checkpoint_thread_id": "demo-user-a::s08",
+        "status_profile": "status_unavailable",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "Check whether Wi-Fi is down. If it is operating, prepare a ticket. I already enabled Wi-Fi and reconnected, with no success.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "check_service_status"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "check_service_status"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "I couldn't find out whether Wi-Fi is down. The status check came back **unknown** because the demo Wi-Fi status source isn't available. That doesn't mean Wi-Fi is working, and it doesn't confirm an outage either.\n\nYou asked for a ticket only if Wi-Fi is working, so **I haven't prepared one**.\n\nDo you want me to prepare a local ticket draft anyway? It would say that the status couldn't be checked and that you already turned Wi-Fi on and reconnected without success."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "check_service_status",
+            "args": {
+              "service": "wifi"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "check_service_status",
+            "result": {
+              "service": "wifi",
+              "status": "unknown",
+              "message": "The demo Wi-Fi status source is unavailable.",
+              "repair_time": null,
+              "status_profile": "status_unavailable",
+              "source": "data/service_status.json#status_unavailable.wifi"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [],
+          "service_status": [
+            {
+              "service": "wifi",
+              "status": "unknown",
+              "source": "data/service_status.json#status_unavailable.wifi"
+            }
+          ],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 5,
+        "reply": "I couldn't find out whether Wi-Fi is down. The status check came back **unknown** because the demo Wi-Fi status source isn't available. That doesn't mean Wi-Fi is working, and it doesn't confirm an outage either.\n\nYou asked for a ticket only if Wi-Fi is working, so **I haven't prepared one**.\n\nDo you want me to prepare a local ticket draft anyway? It would say that the status couldn't be checked and that you already turned Wi-Fi on and reconnected without success."
+      }
+    }
+  ],
+  "final_reply": "I couldn't find out whether Wi-Fi is down. The status check came back **unknown** because the demo Wi-Fi status source isn't available. That doesn't mean Wi-Fi is working, and it doesn't confirm an outage either.\n\nYou asked for a ticket only if Wi-Fi is working, so **I haven't prepared one**.\n\nDo you want me to prepare a local ticket draft anyway? It would say that the status couldn't be checked and that you already turned Wi-Fi on and reconnected without success.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

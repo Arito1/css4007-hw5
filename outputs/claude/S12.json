@@ -1,0 +1,187 @@
+{
+  "scenario": "S12",
+  "title": "Preference across threads without replay",
+  "part": 3,
+  "command": "python -m helpdesk scenarios --model anthropic",
+  "status_profile": "normal",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 23604,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "preference-a1",
+        "checkpoint_thread_id": "demo-user-a::preference-a1",
+        "status_profile": "normal",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "Please remember that I prefer replies in Kazakh. I have a Wi-Fi problem.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "save_user_preference",
+              "find_instructions"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "save_user_preference",
+              "find_instructions"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "Жақсы, енді сізге қазақ тілінде жауап беремін. Бұл қалауыңыз сақталды.\n\nWi-Fi нұсқаулығы (GUIDE-WIFI):\n1. Wi-Fi қосулы екенін және ұшақ режимі өшірулі екенін тексеріңіз.\n2. Campus-Demo желісін таңдаңыз.\n3. Қосылмаса, сақталған желіні ұмытып (forget), қайта қосылып көріңіз.\n4. Мәселе шешілмесе, өтінім жасамас бұрын қызмет күйін тексеру керек.\n\nНе болып жатқанын қысқаша айтып беріңізші. Қай қадамдарды жасап көрдіңіз? Қаласаңыз, Wi-Fi қызметінің күйін тексеріп беремін."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "save_user_preference",
+            "args": {
+              "language": "Kazakh"
+            }
+          },
+          {
+            "round": 1,
+            "tool": "find_instructions",
+            "args": {
+              "topic": "wifi"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "save_user_preference",
+            "result": {
+              "saved": true,
+              "user_memory": {
+                "language": "Kazakh"
+              }
+            }
+          },
+          {
+            "tool": "find_instructions",
+            "result": {
+              "found": true,
+              "topic": "wifi",
+              "instruction_id": "GUIDE-WIFI",
+              "title": "Connect to the practice campus network",
+              "steps": [
+                "Check that Wi-Fi is enabled and airplane mode is off.",
+                "Select the fictional Campus-Demo network.",
+                "If connection fails, forget the saved network and try connecting again.",
+                "If the problem remains, check the service status before preparing a ticket."
+              ],
+              "source": "data/helpdesk.json#GUIDE-WIFI"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [
+            "data/helpdesk.json#GUIDE-WIFI"
+          ],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": [
+            {
+              "language": "Kazakh"
+            }
+          ]
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 6,
+        "reply": "Жақсы, енді сізге қазақ тілінде жауап беремін. Бұл қалауыңыз сақталды.\n\nWi-Fi нұсқаулығы (GUIDE-WIFI):\n1. Wi-Fi қосулы екенін және ұшақ режимі өшірулі екенін тексеріңіз.\n2. Campus-Demo желісін таңдаңыз.\n3. Қосылмаса, сақталған желіні ұмытып (forget), қайта қосылып көріңіз.\n4. Мәселе шешілмесе, өтінім жасамас бұрын қызмет күйін тексеру керек.\n\nНе болып жатқанын қысқаша айтып беріңізші. Қай қадамдарды жасап көрдіңіз? Қаласаңыз, Wi-Fi қызметінің күйін тексеріп беремін."
+      }
+    },
+    {
+      "action": "restart_process",
+      "preserve_local_storage": true,
+      "previous_pid": 23604,
+      "next_pid": 13940
+    },
+    {
+      "action": "message",
+      "process_pid": 13940,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "preference-a2",
+        "checkpoint_thread_id": "demo-user-a::preference-a2",
+        "status_profile": "normal",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "Which language did I ask you to use? What can you help with?",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {
+                "language": "Kazakh"
+              },
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "final_answer": "Сіз маған **қазақ тілінде** жауап беруді сұрадыңыз. Бұл сақталған соңғы тіл таңдауыңыз.\n\nМен мына мәселелер бойынша көмектесе аламын:\n- **Wi-Fi** ақауларын шешу.\n- **Құпия сөзді қалпына келтіру** бойынша нұсқаулық беру. Құпия сөздерді немесе кодтарды сұрамаймын.\n- **Қызметтің жұмыс күйін** тексеру.\n- **Жергілікті өтінім жобасын** дайындау. Ол ешқайда жіберілмейді.\n\nБұл оқу жаттығуына арналған ойдан шығарылған анықтама қызметі, сондықтан нақты университет жүйелеріне қол жеткізе алмаймын."
+          }
+        ],
+        "model_tool_requests": [],
+        "tool_results": [],
+        "sources": {
+          "reference_file": [],
+          "service_status": [],
+          "user_memory_read": {
+            "language": "Kazakh"
+          },
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 0,
+        "messages_in_checkpoint_after": 3,
+        "reply": "Сіз маған **қазақ тілінде** жауап беруді сұрадыңыз. Бұл сақталған соңғы тіл таңдауыңыз.\n\nМен мына мәселелер бойынша көмектесе аламын:\n- **Wi-Fi** ақауларын шешу.\n- **Құпия сөзді қалпына келтіру** бойынша нұсқаулық беру. Құпия сөздерді немесе кодтарды сұрамаймын.\n- **Қызметтің жұмыс күйін** тексеру.\n- **Жергілікті өтінім жобасын** дайындау. Ол ешқайда жіберілмейді.\n\nБұл оқу жаттығуына арналған ойдан шығарылған анықтама қызметі, сондықтан нақты университет жүйелеріне қол жеткізе алмаймын."
+      }
+    }
+  ],
+  "final_reply": "Сіз маған **қазақ тілінде** жауап беруді сұрадыңыз. Бұл сақталған соңғы тіл таңдауыңыз.\n\nМен мына мәселелер бойынша көмектесе аламын:\n- **Wi-Fi** ақауларын шешу.\n- **Құпия сөзді қалпына келтіру** бойынша нұсқаулық беру. Құпия сөздерді немесе кодтарды сұрамаймын.\n- **Қызметтің жұмыс күйін** тексеру.\n- **Жергілікті өтінім жобасын** дайындау. Ол ешқайда жіберілмейді.\n\nБұл оқу жаттығуына арналған ойдан шығарылған анықтама қызметі, сондықтан нақты университет жүйелеріне қол жеткізе алмаймын.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

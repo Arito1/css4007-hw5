@@ -1,0 +1,172 @@
+{
+  "scenario": "S09",
+  "title": "Missing ticket details",
+  "part": 2,
+  "command": "python -m helpdesk scenarios --model anthropic",
+  "status_profile": "normal",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 19752,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s09",
+        "checkpoint_thread_id": "demo-user-a::s09",
+        "status_profile": "normal",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "Prepare a support ticket.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "final_answer": "I can prepare a local ticket draft. First, I need two details:\n\n1. **What's the problem?** For example, a Wi-Fi issue or a password issue, plus a short description.\n2. **What have you already tried?** List any steps you've already taken.\n\nPlease don't include any passwords or recovery codes."
+          }
+        ],
+        "model_tool_requests": [],
+        "tool_results": [],
+        "sources": {
+          "reference_file": [],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 0,
+        "messages_in_checkpoint_after": 3,
+        "reply": "I can prepare a local ticket draft. First, I need two details:\n\n1. **What's the problem?** For example, a Wi-Fi issue or a password issue, plus a short description.\n2. **What have you already tried?** List any steps you've already taken.\n\nPlease don't include any passwords or recovery codes."
+      }
+    },
+    {
+      "action": "message",
+      "process_pid": 19752,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s09",
+        "checkpoint_thread_id": "demo-user-a::s09",
+        "status_profile": "normal",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "The issue is Wi-Fi. I enabled it and tried reconnecting, but it still fails.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 3,
+          "earlier_user_messages": [
+            "Prepare a support ticket."
+          ]
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "prepare_ticket"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "prepare_ticket"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "I saved your ticket as a local draft. It hasn't been sent anywhere.\n\n- **Ticket:** TCK-20261109-200945-43E7D2\n- **Problem:** Wi-Fi connection fails\n- **Steps you tried:** Turned on Wi-Fi and tried reconnecting\n- **Service status:** Not checked\n- **File:** `outputs/claude/tickets/TCK-20261109-200945-43E7D2.json`\n\nI can also check whether the Wi-Fi service is working or look up the helpdesk's Wi-Fi troubleshooting steps."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "prepare_ticket",
+            "args": {
+              "category": "wifi",
+              "summary": "Wi-Fi connection fails",
+              "steps_tried": [
+                "Enabled Wi-Fi",
+                "Tried reconnecting"
+              ],
+              "service_status": "not_checked"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "prepare_ticket",
+            "result": {
+              "created": true,
+              "ticket": {
+                "ticket_id": "TCK-20261109-200945-43E7D2",
+                "status": "draft",
+                "user_id": "demo-user-a",
+                "thread_id": "s09",
+                "category": "wifi",
+                "summary": "Wi-Fi connection fails",
+                "steps_tried": [
+                  "Enabled Wi-Fi",
+                  "Tried reconnecting"
+                ],
+                "service_status": "not_checked",
+                "status_profile": null,
+                "reference_ids": []
+              },
+              "file": "outputs/claude/tickets/TCK-20261109-200945-43E7D2.json",
+              "sent": false
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [
+          "outputs/claude/tickets/TCK-20261109-200945-43E7D2.json"
+        ],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 8,
+        "reply": "I saved your ticket as a local draft. It hasn't been sent anywhere.\n\n- **Ticket:** TCK-20261109-200945-43E7D2\n- **Problem:** Wi-Fi connection fails\n- **Steps you tried:** Turned on Wi-Fi and tried reconnecting\n- **Service status:** Not checked\n- **File:** `outputs/claude/tickets/TCK-20261109-200945-43E7D2.json`\n\nI can also check whether the Wi-Fi service is working or look up the helpdesk's Wi-Fi troubleshooting steps."
+      }
+    }
+  ],
+  "final_reply": "I saved your ticket as a local draft. It hasn't been sent anywhere.\n\n- **Ticket:** TCK-20261109-200945-43E7D2\n- **Problem:** Wi-Fi connection fails\n- **Steps you tried:** Turned on Wi-Fi and tried reconnecting\n- **Service status:** Not checked\n- **File:** `outputs/claude/tickets/TCK-20261109-200945-43E7D2.json`\n\nI can also check whether the Wi-Fi service is working or look up the helpdesk's Wi-Fi troubleshooting steps.",
+  "ticket_files": [
+    "outputs/claude/tickets/TCK-20261109-200945-43E7D2.json"
+  ],
+  "loop_limit_reached": false
+}

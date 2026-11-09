@@ -1,0 +1,18 @@
+{
+  "ticket": {
+    "ticket_id": "TCK-20261109-200945-43E7D2",
+    "status": "draft",
+    "user_id": "demo-user-a",
+    "thread_id": "s09",
+    "category": "wifi",
+    "summary": "Wi-Fi connection fails",
+    "steps_tried": [
+      "Enabled Wi-Fi",
+      "Tried reconnecting"
+    ],
+    "service_status": "not_checked",
+    "status_profile": null,
+    "reference_ids": []
+  },
+  "delivery": "local draft only, not sent"
+}

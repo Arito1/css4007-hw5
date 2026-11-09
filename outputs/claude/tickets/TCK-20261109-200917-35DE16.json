@@ -1,11 +1,11 @@
 {
   "ticket": {
-    "ticket_id": "TCK-20261109-113117-7E4521",
+    "ticket_id": "TCK-20261109-200917-35DE16",
     "status": "draft",
     "user_id": "demo-user-a",
-    "thread_id": "direct-tool-call",
+    "thread_id": "s06",
     "category": "wifi",
-    "summary": "Campus-Demo still will not connect.",
+    "summary": "Campus-Demo Wi-Fi network will not connect.",
     "steps_tried": [
       "Enabled Wi-Fi",
       "Forgot the saved network"

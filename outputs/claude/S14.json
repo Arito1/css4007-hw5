@@ -1,0 +1,106 @@
+{
+  "scenario": "S14",
+  "title": "Password recovery outage",
+  "part": 2,
+  "command": "python -m helpdesk scenarios --model anthropic",
+  "status_profile": "recovery_outage",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 17192,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s14",
+        "checkpoint_thread_id": "demo-user-a::s14",
+        "status_profile": "recovery_outage",
+        "model": "Anthropic Claude via langchain-anthropic, model=claude-opus-5-5",
+        "user_message": "My password recovery page is unavailable. Check the service status. Is there a known problem?",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "check_service_status"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "check_service_status"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "Yes, there's a known problem. The account recovery service is showing an **outage**, so the recovery page being down is part of that and not something wrong on your side.\n\nThe status data doesn't say when it will be fixed, so I can't give you a repair time.\n\nIf you'd like, I can write up a local ticket draft. To do that, I'd need a short description of the problem and the steps you've already tried."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "check_service_status",
+            "args": {
+              "service": "account_recovery"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "check_service_status",
+            "result": {
+              "service": "account_recovery",
+              "status": "outage",
+              "message": "The demo account-recovery service is unavailable. The fixture gives no repair time.",
+              "repair_time": null,
+              "status_profile": "recovery_outage",
+              "source": "data/service_status.json#recovery_outage.account_recovery"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [],
+          "service_status": [
+            {
+              "service": "account_recovery",
+              "status": "outage",
+              "source": "data/service_status.json#recovery_outage.account_recovery"
+            }
+          ],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 5,
+        "reply": "Yes, there's a known problem. The account recovery service is showing an **outage**, so the recovery page being down is part of that and not something wrong on your side.\n\nThe status data doesn't say when it will be fixed, so I can't give you a repair time.\n\nIf you'd like, I can write up a local ticket draft. To do that, I'd need a short description of the problem and the steps you've already tried."
+      }
+    }
+  ],
+  "final_reply": "Yes, there's a known problem. The account recovery service is showing an **outage**, so the recovery page being down is part of that and not something wrong on your side.\n\nThe status data doesn't say when it will be fixed, so I can't give you a repair time.\n\nIf you'd like, I can write up a local ticket draft. To do that, I'd need a short description of the problem and the steps you've already tried.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

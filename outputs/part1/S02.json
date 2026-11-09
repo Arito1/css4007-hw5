@@ -1,0 +1,73 @@
+{
+  "scenario": "S02",
+  "title": "Case-insensitive password route",
+  "part": 1,
+  "command": "python -m helpdesk scenarios --model fake",
+  "status_profile": "normal",
+  "graph_variant": "original",
+  "model": "none (Part 1 has no model)",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 15060,
+      "user_id": "demo-user-a",
+      "thread_id": "s02",
+      "trace": {
+        "graph_variant": "original",
+        "input": {
+          "message": "I forgot my PASSWORD."
+        },
+        "route": [
+          "START",
+          "read_request",
+          "password_help",
+          "END"
+        ],
+        "steps": [
+          {
+            "node": "read_request",
+            "update": {
+              "topics": [
+                "password"
+              ],
+              "category": "password"
+            },
+            "state_after": {
+              "message": "I forgot my PASSWORD.",
+              "topics": [
+                "password"
+              ],
+              "category": "password"
+            }
+          },
+          {
+            "node": "password_help",
+            "update": {
+              "reply": "Recover access to the practice account (GUIDE-PASSWORD):\n1. Open the practice sign-in screen and choose Forgot password.\n2. Follow the recovery instructions shown by the practice application.\n3. If recovery is unavailable, prepare a ticket describing the error.\n4. Never include a password or recovery code in a ticket."
+            },
+            "state_after": {
+              "message": "I forgot my PASSWORD.",
+              "topics": [
+                "password"
+              ],
+              "category": "password",
+              "reply": "Recover access to the practice account (GUIDE-PASSWORD):\n1. Open the practice sign-in screen and choose Forgot password.\n2. Follow the recovery instructions shown by the practice application.\n3. If recovery is unavailable, prepare a ticket describing the error.\n4. Never include a password or recovery code in a ticket."
+            }
+          }
+        ],
+        "final_state": {
+          "message": "I forgot my PASSWORD.",
+          "topics": [
+            "password"
+          ],
+          "category": "password",
+          "reply": "Recover access to the practice account (GUIDE-PASSWORD):\n1. Open the practice sign-in screen and choose Forgot password.\n2. Follow the recovery instructions shown by the practice application.\n3. If recovery is unavailable, prepare a ticket describing the error.\n4. Never include a password or recovery code in a ticket."
+        },
+        "reply": "Recover access to the practice account (GUIDE-PASSWORD):\n1. Open the practice sign-in screen and choose Forgot password.\n2. Follow the recovery instructions shown by the practice application.\n3. If recovery is unavailable, prepare a ticket describing the error.\n4. Never include a password or recovery code in a ticket."
+      }
+    }
+  ],
+  "final_reply": "Recover access to the practice account (GUIDE-PASSWORD):\n1. Open the practice sign-in screen and choose Forgot password.\n2. Follow the recovery instructions shown by the practice application.\n3. If recovery is unavailable, prepare a ticket describing the error.\n4. Never include a password or recovery code in a ticket.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

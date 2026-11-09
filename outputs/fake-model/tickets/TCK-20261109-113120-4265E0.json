@@ -1,0 +1,20 @@
+{
+  "ticket": {
+    "ticket_id": "TCK-20261109-113120-4265E0",
+    "status": "draft",
+    "user_id": "demo-user-a",
+    "thread_id": "s06",
+    "category": "wifi",
+    "summary": "Wi-Fi problem: I enabled Wi-Fi and forgot the saved network, but Campus-Demo still will not connect.",
+    "steps_tried": [
+      "Enabled Wi-Fi",
+      "Forgot the saved network"
+    ],
+    "service_status": "operational",
+    "status_profile": "normal",
+    "reference_ids": [
+      "GUIDE-WIFI"
+    ]
+  },
+  "delivery": "local draft only, not sent"
+}

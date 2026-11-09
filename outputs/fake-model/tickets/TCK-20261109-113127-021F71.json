@@ -1,0 +1,18 @@
+{
+  "ticket": {
+    "ticket_id": "TCK-20261109-113127-021F71",
+    "status": "draft",
+    "user_id": "demo-user-a",
+    "thread_id": "s09",
+    "category": "wifi",
+    "summary": "Wi-Fi problem: I enabled it and tried reconnecting, but it still fails.",
+    "steps_tried": [
+      "Enabled Wi-Fi",
+      "Tried reconnecting"
+    ],
+    "service_status": "not_checked",
+    "status_profile": null,
+    "reference_ids": []
+  },
+  "delivery": "local draft only, not sent"
+}

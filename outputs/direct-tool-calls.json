@@ -1,0 +1,174 @@
+{
+  "description": "Direct tool calls, no agent and no model (python -m helpdesk scenarios)",
+  "calls": [
+    {
+      "tool": "find_instructions",
+      "args": {
+        "topic": "wifi"
+      },
+      "result": {
+        "found": true,
+        "topic": "wifi",
+        "instruction_id": "GUIDE-WIFI",
+        "title": "Connect to the practice campus network",
+        "steps": [
+          "Check that Wi-Fi is enabled and airplane mode is off.",
+          "Select the fictional Campus-Demo network.",
+          "If connection fails, forget the saved network and try connecting again.",
+          "If the problem remains, check the service status before preparing a ticket."
+        ],
+        "source": "data/helpdesk.json#GUIDE-WIFI"
+      }
+    },
+    {
+      "tool": "find_instructions",
+      "args": {
+        "topic": "password"
+      },
+      "result": {
+        "found": true,
+        "topic": "password",
+        "instruction_id": "GUIDE-PASSWORD",
+        "title": "Recover access to the practice account",
+        "steps": [
+          "Open the practice sign-in screen and choose Forgot password.",
+          "Follow the recovery instructions shown by the practice application.",
+          "If recovery is unavailable, prepare a ticket describing the error.",
+          "Never include a password or recovery code in a ticket."
+        ],
+        "source": "data/helpdesk.json#GUIDE-PASSWORD"
+      }
+    },
+    {
+      "tool": "find_instructions",
+      "args": {
+        "topic": "printer"
+      },
+      "result": {
+        "found": false,
+        "topic": "printer",
+        "message": "No local instructions for this topic. Supported topics: wifi, password.",
+        "source": "data/helpdesk.json"
+      }
+    },
+    {
+      "tool": "check_service_status",
+      "args": {
+        "service": "wifi",
+        "status_profile": "normal"
+      },
+      "result": {
+        "service": "wifi",
+        "status": "operational",
+        "message": "The demo Wi-Fi service has no reported outage.",
+        "repair_time": null,
+        "status_profile": "normal",
+        "source": "data/service_status.json#normal.wifi"
+      }
+    },
+    {
+      "tool": "check_service_status",
+      "args": {
+        "service": "wifi",
+        "status_profile": "wifi_outage"
+      },
+      "result": {
+        "service": "wifi",
+        "status": "outage",
+        "message": "The demo Wi-Fi service is unavailable across campus. The fixture gives no repair time.",
+        "repair_time": null,
+        "status_profile": "wifi_outage",
+        "source": "data/service_status.json#wifi_outage.wifi"
+      }
+    },
+    {
+      "tool": "check_service_status",
+      "args": {
+        "service": "wifi",
+        "status_profile": "recovery_outage"
+      },
+      "result": {
+        "service": "wifi",
+        "status": "operational",
+        "message": "The demo Wi-Fi service has no reported outage.",
+        "repair_time": null,
+        "status_profile": "recovery_outage",
+        "source": "data/service_status.json#recovery_outage.wifi"
+      }
+    },
+    {
+      "tool": "check_service_status",
+      "args": {
+        "service": "wifi",
+        "status_profile": "status_unavailable"
+      },
+      "result": {
+        "service": "wifi",
+        "status": "unknown",
+        "message": "The demo Wi-Fi status source is unavailable.",
+        "repair_time": null,
+        "status_profile": "status_unavailable",
+        "source": "data/service_status.json#status_unavailable.wifi"
+      }
+    },
+    {
+      "tool": "prepare_ticket",
+      "args": {
+        "category": "wifi",
+        "summary": "Campus-Demo still will not connect.",
+        "steps_tried": [
+          "Enabled Wi-Fi",
+          "Forgot the saved network"
+        ],
+        "user_id": "demo-user-a",
+        "thread_id": "direct-tool-call",
+        "status_profile": "normal",
+        "service_status": "operational",
+        "reference_ids": [
+          "GUIDE-WIFI"
+        ]
+      },
+      "result": {
+        "created": true,
+        "ticket": {
+          "ticket_id": "TCK-20261109-113117-7E4521",
+          "status": "draft",
+          "user_id": "demo-user-a",
+          "thread_id": "direct-tool-call",
+          "category": "wifi",
+          "summary": "Campus-Demo still will not connect.",
+          "steps_tried": [
+            "Enabled Wi-Fi",
+            "Forgot the saved network"
+          ],
+          "service_status": "operational",
+          "status_profile": "normal",
+          "reference_ids": [
+            "GUIDE-WIFI"
+          ]
+        },
+        "file": "outputs/direct-tool-tickets/TCK-20261109-113117-7E4521.json",
+        "sent": false
+      }
+    },
+    {
+      "tool": "prepare_ticket",
+      "args": {
+        "category": "wifi",
+        "summary": "Campus-Demo still will not connect.",
+        "steps_tried": [],
+        "user_id": "demo-user-a",
+        "thread_id": "direct-tool-call",
+        "status_profile": "normal",
+        "service_status": "operational",
+        "reference_ids": [
+          "GUIDE-WIFI"
+        ]
+      },
+      "result": {
+        "created": false,
+        "error": "Cannot prepare the ticket: missing steps already tried. Ask the user; do not invent them."
+      }
+    }
+  ]
+}

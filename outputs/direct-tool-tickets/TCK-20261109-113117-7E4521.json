@@ -1,0 +1,20 @@
+{
+  "ticket": {
+    "ticket_id": "TCK-20261109-113117-7E4521",
+    "status": "draft",
+    "user_id": "demo-user-a",
+    "thread_id": "direct-tool-call",
+    "category": "wifi",
+    "summary": "Campus-Demo still will not connect.",
+    "steps_tried": [
+      "Enabled Wi-Fi",
+      "Forgot the saved network"
+    ],
+    "service_status": "operational",
+    "status_profile": "normal",
+    "reference_ids": [
+      "GUIDE-WIFI"
+    ]
+  },
+  "delivery": "local draft only, not sent"
+}

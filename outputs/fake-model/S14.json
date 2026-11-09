@@ -1,0 +1,106 @@
+{
+  "scenario": "S14",
+  "title": "Password recovery outage",
+  "part": 2,
+  "command": "python -m helpdesk scenarios --model fake",
+  "status_profile": "recovery_outage",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 1828,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s14",
+        "checkpoint_thread_id": "demo-user-a::s14",
+        "status_profile": "recovery_outage",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "My password recovery page is unavailable. Check the service status. Is there a known problem?",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "check_service_status"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "check_service_status"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "The demo status source reports an outage of account recovery: The demo account-recovery service is unavailable. The fixture gives no repair time.\nIf you want, I can prepare a local ticket draft describing the error."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "check_service_status",
+            "args": {
+              "service": "account_recovery"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "check_service_status",
+            "result": {
+              "service": "account_recovery",
+              "status": "outage",
+              "message": "The demo account-recovery service is unavailable. The fixture gives no repair time.",
+              "repair_time": null,
+              "status_profile": "recovery_outage",
+              "source": "data/service_status.json#recovery_outage.account_recovery"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [],
+          "service_status": [
+            {
+              "service": "account_recovery",
+              "status": "outage",
+              "source": "data/service_status.json#recovery_outage.account_recovery"
+            }
+          ],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 5,
+        "reply": "The demo status source reports an outage of account recovery: The demo account-recovery service is unavailable. The fixture gives no repair time.\nIf you want, I can prepare a local ticket draft describing the error."
+      }
+    }
+  ],
+  "final_reply": "The demo status source reports an outage of account recovery: The demo account-recovery service is unavailable. The fixture gives no repair time.\nIf you want, I can prepare a local ticket draft describing the error.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

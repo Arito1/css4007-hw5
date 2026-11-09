@@ -1,0 +1,173 @@
+{
+  "scenario": "S09",
+  "title": "Missing ticket details",
+  "part": 2,
+  "command": "python -m helpdesk scenarios --model fake",
+  "status_profile": "normal",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 17536,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s09",
+        "checkpoint_thread_id": "demo-user-a::s09",
+        "status_profile": "normal",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "Prepare a support ticket.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "final_answer": "What problem are you having, and what have you already tried?"
+          }
+        ],
+        "model_tool_requests": [],
+        "tool_results": [],
+        "sources": {
+          "reference_file": [],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 0,
+        "messages_in_checkpoint_after": 3,
+        "reply": "What problem are you having, and what have you already tried?"
+      }
+    },
+    {
+      "action": "message",
+      "process_pid": 17536,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s09",
+        "checkpoint_thread_id": "demo-user-a::s09",
+        "status_profile": "normal",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "The issue is Wi-Fi. I enabled it and tried reconnecting, but it still fails.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 3,
+          "earlier_user_messages": [
+            "Prepare a support ticket."
+          ]
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "prepare_ticket"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "prepare_ticket"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "I prepared a local ticket draft TCK-20261109-113127-021F71 (outputs/fake-model/tickets/TCK-20261109-113127-021F71.json) with the steps you stated: Enabled Wi-Fi; Tried reconnecting. Service status: not checked. Nothing has been sent."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "prepare_ticket",
+            "args": {
+              "category": "wifi",
+              "summary": "Wi-Fi problem: I enabled it and tried reconnecting, but it still fails.",
+              "steps_tried": [
+                "Enabled Wi-Fi",
+                "Tried reconnecting"
+              ],
+              "service_status": "not_checked",
+              "reference_ids": []
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "prepare_ticket",
+            "result": {
+              "created": true,
+              "ticket": {
+                "ticket_id": "TCK-20261109-113127-021F71",
+                "status": "draft",
+                "user_id": "demo-user-a",
+                "thread_id": "s09",
+                "category": "wifi",
+                "summary": "Wi-Fi problem: I enabled it and tried reconnecting, but it still fails.",
+                "steps_tried": [
+                  "Enabled Wi-Fi",
+                  "Tried reconnecting"
+                ],
+                "service_status": "not_checked",
+                "status_profile": null,
+                "reference_ids": []
+              },
+              "file": "outputs/fake-model/tickets/TCK-20261109-113127-021F71.json",
+              "sent": false
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [
+          "outputs/fake-model/tickets/TCK-20261109-113127-021F71.json"
+        ],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 8,
+        "reply": "I prepared a local ticket draft TCK-20261109-113127-021F71 (outputs/fake-model/tickets/TCK-20261109-113127-021F71.json) with the steps you stated: Enabled Wi-Fi; Tried reconnecting. Service status: not checked. Nothing has been sent."
+      }
+    }
+  ],
+  "final_reply": "I prepared a local ticket draft TCK-20261109-113127-021F71 (outputs/fake-model/tickets/TCK-20261109-113127-021F71.json) with the steps you stated: Enabled Wi-Fi; Tried reconnecting. Service status: not checked. Nothing has been sent.",
+  "ticket_files": [
+    "outputs/fake-model/tickets/TCK-20261109-113127-021F71.json"
+  ],
+  "loop_limit_reached": false
+}

@@ -1,0 +1,204 @@
+{
+  "scenario": "S11",
+  "title": "Persist and recall after restart",
+  "part": 3,
+  "command": "python -m helpdesk scenarios --model fake",
+  "status_profile": "normal",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 7040,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "restart-a",
+        "checkpoint_thread_id": "demo-user-a::restart-a",
+        "status_profile": "normal",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "Please remember that I prefer replies in Kazakh. My issue is Wi-Fi. I enabled it and tried reconnecting, but it still fails.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "save_user_preference"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "save_user_preference"
+            ]
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "find_instructions"
+            ],
+            "state_update": {
+              "tool_rounds": 2
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "find_instructions"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "I saved your preference in user memory: replies in Kazakh.\nHere are the instructions from the local guide (GUIDE-WIFI):\n1. Check that Wi-Fi is enabled and airplane mode is off.\n2. Select the fictional Campus-Demo network.\n3. If connection fails, forget the saved network and try connecting again.\n4. If the problem remains, check the service status before preparing a ticket.\nYou said you already tried: Enabled Wi-Fi; Tried reconnecting. Next I can check the service status or prepare a local ticket draft."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "save_user_preference",
+            "args": {
+              "language": "Kazakh"
+            }
+          },
+          {
+            "round": 2,
+            "tool": "find_instructions",
+            "args": {
+              "topic": "wifi"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "save_user_preference",
+            "result": {
+              "saved": true,
+              "user_memory": {
+                "language": "Kazakh"
+              }
+            }
+          },
+          {
+            "tool": "find_instructions",
+            "result": {
+              "found": true,
+              "topic": "wifi",
+              "instruction_id": "GUIDE-WIFI",
+              "title": "Connect to the practice campus network",
+              "steps": [
+                "Check that Wi-Fi is enabled and airplane mode is off.",
+                "Select the fictional Campus-Demo network.",
+                "If connection fails, forget the saved network and try connecting again.",
+                "If the problem remains, check the service status before preparing a ticket."
+              ],
+              "source": "data/helpdesk.json#GUIDE-WIFI"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [
+            "data/helpdesk.json#GUIDE-WIFI"
+          ],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": [
+            {
+              "language": "Kazakh"
+            }
+          ]
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 2,
+        "messages_in_checkpoint_after": 7,
+        "reply": "I saved your preference in user memory: replies in Kazakh.\nHere are the instructions from the local guide (GUIDE-WIFI):\n1. Check that Wi-Fi is enabled and airplane mode is off.\n2. Select the fictional Campus-Demo network.\n3. If connection fails, forget the saved network and try connecting again.\n4. If the problem remains, check the service status before preparing a ticket.\nYou said you already tried: Enabled Wi-Fi; Tried reconnecting. Next I can check the service status or prepare a local ticket draft."
+      }
+    },
+    {
+      "action": "restart_process",
+      "preserve_local_storage": true,
+      "previous_pid": 7040,
+      "next_pid": 20248
+    },
+    {
+      "action": "message",
+      "process_pid": 20248,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "restart-a",
+        "checkpoint_thread_id": "demo-user-a::restart-a",
+        "status_profile": "normal",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "Which problem and steps did we discuss?",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 7,
+          "earlier_user_messages": [
+            "Please remember that I prefer replies in Kazakh. My issue is Wi-Fi. I enabled it and tried reconnecting, but it still fails."
+          ]
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {
+                "language": "Kazakh"
+              },
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "final_answer": "[Reply language from user memory: Kazakh. This FAKE model cannot translate; the real model answers in Kazakh.]\nYou reported a Wi-Fi problem.\nSteps you said you already tried: Enabled Wi-Fi; Tried reconnecting, and it still did not work."
+          }
+        ],
+        "model_tool_requests": [],
+        "tool_results": [],
+        "sources": {
+          "reference_file": [],
+          "service_status": [],
+          "user_memory_read": {
+            "language": "Kazakh"
+          },
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 0,
+        "messages_in_checkpoint_after": 10,
+        "reply": "[Reply language from user memory: Kazakh. This FAKE model cannot translate; the real model answers in Kazakh.]\nYou reported a Wi-Fi problem.\nSteps you said you already tried: Enabled Wi-Fi; Tried reconnecting, and it still did not work."
+      }
+    }
+  ],
+  "final_reply": "[Reply language from user memory: Kazakh. This FAKE model cannot translate; the real model answers in Kazakh.]\nYou reported a Wi-Fi problem.\nSteps you said you already tried: Enabled Wi-Fi; Tried reconnecting, and it still did not work.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

@@ -1,0 +1,262 @@
+{
+  "scenario": "S06",
+  "title": "Instructions then local ticket",
+  "part": 2,
+  "command": "python -m helpdesk scenarios --model fake",
+  "status_profile": "normal",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 25412,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s06",
+        "checkpoint_thread_id": "demo-user-a::s06",
+        "status_profile": "normal",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "Show me the Wi-Fi troubleshooting steps.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "find_instructions"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "find_instructions"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "Here are the instructions from the local guide (GUIDE-WIFI):\n1. Check that Wi-Fi is enabled and airplane mode is off.\n2. Select the fictional Campus-Demo network.\n3. If connection fails, forget the saved network and try connecting again.\n4. If the problem remains, check the service status before preparing a ticket."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "find_instructions",
+            "args": {
+              "topic": "wifi"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "find_instructions",
+            "result": {
+              "found": true,
+              "topic": "wifi",
+              "instruction_id": "GUIDE-WIFI",
+              "title": "Connect to the practice campus network",
+              "steps": [
+                "Check that Wi-Fi is enabled and airplane mode is off.",
+                "Select the fictional Campus-Demo network.",
+                "If connection fails, forget the saved network and try connecting again.",
+                "If the problem remains, check the service status before preparing a ticket."
+              ],
+              "source": "data/helpdesk.json#GUIDE-WIFI"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [
+            "data/helpdesk.json#GUIDE-WIFI"
+          ],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 5,
+        "reply": "Here are the instructions from the local guide (GUIDE-WIFI):\n1. Check that Wi-Fi is enabled and airplane mode is off.\n2. Select the fictional Campus-Demo network.\n3. If connection fails, forget the saved network and try connecting again.\n4. If the problem remains, check the service status before preparing a ticket."
+      }
+    },
+    {
+      "action": "message",
+      "process_pid": 25412,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s06",
+        "checkpoint_thread_id": "demo-user-a::s06",
+        "status_profile": "normal",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "I enabled Wi-Fi and forgot the saved network, but Campus-Demo still will not connect. Check whether Wi-Fi is down. If it is operating, prepare a ticket about this problem.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 5,
+          "earlier_user_messages": [
+            "Show me the Wi-Fi troubleshooting steps."
+          ]
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "check_service_status"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "check_service_status"
+            ]
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "prepare_ticket"
+            ],
+            "state_update": {
+              "tool_rounds": 2
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "prepare_ticket"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "The demo status source reports Wi-Fi is operating (The demo Wi-Fi service has no reported outage.)\nI prepared a local ticket draft TCK-20261109-113120-4265E0 (outputs/fake-model/tickets/TCK-20261109-113120-4265E0.json) with the steps you stated: Enabled Wi-Fi; Forgot the saved network. Service status: known: operational. Nothing has been sent."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "check_service_status",
+            "args": {
+              "service": "wifi"
+            }
+          },
+          {
+            "round": 2,
+            "tool": "prepare_ticket",
+            "args": {
+              "category": "wifi",
+              "summary": "Wi-Fi problem: I enabled Wi-Fi and forgot the saved network, but Campus-Demo still will not connect.",
+              "steps_tried": [
+                "Enabled Wi-Fi",
+                "Forgot the saved network"
+              ],
+              "service_status": "operational",
+              "reference_ids": [
+                "GUIDE-WIFI"
+              ]
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "check_service_status",
+            "result": {
+              "service": "wifi",
+              "status": "operational",
+              "message": "The demo Wi-Fi service has no reported outage.",
+              "repair_time": null,
+              "status_profile": "normal",
+              "source": "data/service_status.json#normal.wifi"
+            }
+          },
+          {
+            "tool": "prepare_ticket",
+            "result": {
+              "created": true,
+              "ticket": {
+                "ticket_id": "TCK-20261109-113120-4265E0",
+                "status": "draft",
+                "user_id": "demo-user-a",
+                "thread_id": "s06",
+                "category": "wifi",
+                "summary": "Wi-Fi problem: I enabled Wi-Fi and forgot the saved network, but Campus-Demo still will not connect.",
+                "steps_tried": [
+                  "Enabled Wi-Fi",
+                  "Forgot the saved network"
+                ],
+                "service_status": "operational",
+                "status_profile": "normal",
+                "reference_ids": [
+                  "GUIDE-WIFI"
+                ]
+              },
+              "file": "outputs/fake-model/tickets/TCK-20261109-113120-4265E0.json",
+              "sent": false
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [],
+          "service_status": [
+            {
+              "service": "wifi",
+              "status": "operational",
+              "source": "data/service_status.json#normal.wifi"
+            }
+          ],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [
+          "outputs/fake-model/tickets/TCK-20261109-113120-4265E0.json"
+        ],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 2,
+        "messages_in_checkpoint_after": 12,
+        "reply": "The demo status source reports Wi-Fi is operating (The demo Wi-Fi service has no reported outage.)\nI prepared a local ticket draft TCK-20261109-113120-4265E0 (outputs/fake-model/tickets/TCK-20261109-113120-4265E0.json) with the steps you stated: Enabled Wi-Fi; Forgot the saved network. Service status: known: operational. Nothing has been sent."
+      }
+    }
+  ],
+  "final_reply": "The demo status source reports Wi-Fi is operating (The demo Wi-Fi service has no reported outage.)\nI prepared a local ticket draft TCK-20261109-113120-4265E0 (outputs/fake-model/tickets/TCK-20261109-113120-4265E0.json) with the steps you stated: Enabled Wi-Fi; Forgot the saved network. Service status: known: operational. Nothing has been sent.",
+  "ticket_files": [
+    "outputs/fake-model/tickets/TCK-20261109-113120-4265E0.json"
+  ],
+  "loop_limit_reached": false
+}

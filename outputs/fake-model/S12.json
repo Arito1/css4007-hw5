@@ -1,0 +1,202 @@
+{
+  "scenario": "S12",
+  "title": "Preference across threads without replay",
+  "part": 3,
+  "command": "python -m helpdesk scenarios --model fake",
+  "status_profile": "normal",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 22040,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "preference-a1",
+        "checkpoint_thread_id": "demo-user-a::preference-a1",
+        "status_profile": "normal",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "Please remember that I prefer replies in Kazakh. I have a Wi-Fi problem.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "save_user_preference"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "save_user_preference"
+            ]
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "find_instructions"
+            ],
+            "state_update": {
+              "tool_rounds": 2
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "find_instructions"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "I saved your preference in user memory: replies in Kazakh.\nHere are the instructions from the local guide (GUIDE-WIFI):\n1. Check that Wi-Fi is enabled and airplane mode is off.\n2. Select the fictional Campus-Demo network.\n3. If connection fails, forget the saved network and try connecting again.\n4. If the problem remains, check the service status before preparing a ticket."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "save_user_preference",
+            "args": {
+              "language": "Kazakh"
+            }
+          },
+          {
+            "round": 2,
+            "tool": "find_instructions",
+            "args": {
+              "topic": "wifi"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "save_user_preference",
+            "result": {
+              "saved": true,
+              "user_memory": {
+                "language": "Kazakh"
+              }
+            }
+          },
+          {
+            "tool": "find_instructions",
+            "result": {
+              "found": true,
+              "topic": "wifi",
+              "instruction_id": "GUIDE-WIFI",
+              "title": "Connect to the practice campus network",
+              "steps": [
+                "Check that Wi-Fi is enabled and airplane mode is off.",
+                "Select the fictional Campus-Demo network.",
+                "If connection fails, forget the saved network and try connecting again.",
+                "If the problem remains, check the service status before preparing a ticket."
+              ],
+              "source": "data/helpdesk.json#GUIDE-WIFI"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [
+            "data/helpdesk.json#GUIDE-WIFI"
+          ],
+          "service_status": [],
+          "user_memory_read": {},
+          "user_memory_written": [
+            {
+              "language": "Kazakh"
+            }
+          ]
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 2,
+        "messages_in_checkpoint_after": 7,
+        "reply": "I saved your preference in user memory: replies in Kazakh.\nHere are the instructions from the local guide (GUIDE-WIFI):\n1. Check that Wi-Fi is enabled and airplane mode is off.\n2. Select the fictional Campus-Demo network.\n3. If connection fails, forget the saved network and try connecting again.\n4. If the problem remains, check the service status before preparing a ticket."
+      }
+    },
+    {
+      "action": "restart_process",
+      "preserve_local_storage": true,
+      "previous_pid": 22040,
+      "next_pid": 21520
+    },
+    {
+      "action": "message",
+      "process_pid": 21520,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "preference-a2",
+        "checkpoint_thread_id": "demo-user-a::preference-a2",
+        "status_profile": "normal",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "Which language did I ask you to use? What can you help with?",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {
+                "language": "Kazakh"
+              },
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "final_answer": "[Reply language from user memory: Kazakh. This FAKE model cannot translate; the real model answers in Kazakh.]\nYou asked me to reply in Kazakh (read from your saved user memory).\nI can help with: Wi-Fi troubleshooting, Password recovery guidance, Service status lookup, Preparing local ticket drafts."
+          }
+        ],
+        "model_tool_requests": [],
+        "tool_results": [],
+        "sources": {
+          "reference_file": [],
+          "service_status": [],
+          "user_memory_read": {
+            "language": "Kazakh"
+          },
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 0,
+        "messages_in_checkpoint_after": 3,
+        "reply": "[Reply language from user memory: Kazakh. This FAKE model cannot translate; the real model answers in Kazakh.]\nYou asked me to reply in Kazakh (read from your saved user memory).\nI can help with: Wi-Fi troubleshooting, Password recovery guidance, Service status lookup, Preparing local ticket drafts."
+      }
+    }
+  ],
+  "final_reply": "[Reply language from user memory: Kazakh. This FAKE model cannot translate; the real model answers in Kazakh.]\nYou asked me to reply in Kazakh (read from your saved user memory).\nI can help with: Wi-Fi troubleshooting, Password recovery guidance, Service status lookup, Preparing local ticket drafts.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

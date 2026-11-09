@@ -1,0 +1,106 @@
+{
+  "scenario": "S07",
+  "title": "The same request during a Wi-Fi outage",
+  "part": 2,
+  "command": "python -m helpdesk scenarios --model fake",
+  "status_profile": "wifi_outage",
+  "storage_dir": "local-storage/scenarios",
+  "reset_before": true,
+  "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 14240,
+      "trace": {
+        "user_id": "demo-user-a",
+        "thread_id": "s07",
+        "checkpoint_thread_id": "demo-user-a::s07",
+        "status_profile": "wifi_outage",
+        "model": "FAKE scripted model (helpdesk/fake_model.py) - not an LLM",
+        "user_message": "I enabled Wi-Fi and forgot the saved network, but Campus-Demo still will not connect. Check whether Wi-Fi is down. If it is operating, prepare a ticket about this problem.",
+        "conversation_memory_read": {
+          "messages_loaded_from_checkpoint": 0,
+          "earlier_user_messages": []
+        },
+        "nodes": [
+          {
+            "node": "load_user_memory",
+            "state_update": {
+              "user_memory": {},
+              "tool_rounds": 0
+            }
+          },
+          {
+            "node": "agent",
+            "requested_tools": [
+              "check_service_status"
+            ],
+            "state_update": {
+              "tool_rounds": 1
+            }
+          },
+          {
+            "node": "tools",
+            "executed_tools": [
+              "check_service_status"
+            ]
+          },
+          {
+            "node": "agent",
+            "final_answer": "The demo status source reports an outage of Wi-Fi: The demo Wi-Fi service is unavailable across campus. The fixture gives no repair time.\nYour request said to prepare a ticket only if the service was operating, so I have not prepared that ticket."
+          }
+        ],
+        "model_tool_requests": [
+          {
+            "round": 1,
+            "tool": "check_service_status",
+            "args": {
+              "service": "wifi"
+            }
+          }
+        ],
+        "tool_results": [
+          {
+            "tool": "check_service_status",
+            "result": {
+              "service": "wifi",
+              "status": "outage",
+              "message": "The demo Wi-Fi service is unavailable across campus. The fixture gives no repair time.",
+              "repair_time": null,
+              "status_profile": "wifi_outage",
+              "source": "data/service_status.json#wifi_outage.wifi"
+            }
+          }
+        ],
+        "sources": {
+          "reference_file": [],
+          "service_status": [
+            {
+              "service": "wifi",
+              "status": "outage",
+              "source": "data/service_status.json#wifi_outage.wifi"
+            }
+          ],
+          "user_memory_read": {},
+          "user_memory_written": []
+        },
+        "ticket_files": [],
+        "route": [
+          "START",
+          "load_user_memory",
+          "agent",
+          "tools",
+          "agent",
+          "END"
+        ],
+        "loop_limit_reached": false,
+        "tool_rounds": 1,
+        "messages_in_checkpoint_after": 5,
+        "reply": "The demo status source reports an outage of Wi-Fi: The demo Wi-Fi service is unavailable across campus. The fixture gives no repair time.\nYour request said to prepare a ticket only if the service was operating, so I have not prepared that ticket."
+      }
+    }
+  ],
+  "final_reply": "The demo status source reports an outage of Wi-Fi: The demo Wi-Fi service is unavailable across campus. The fixture gives no repair time.\nYour request said to prepare a ticket only if the service was operating, so I have not prepared that ticket.",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

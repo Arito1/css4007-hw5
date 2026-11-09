@@ -1,0 +1,65 @@
+{
+  "scenario": "S03",
+  "title": "Unsupported request",
+  "part": 1,
+  "command": "python -m helpdesk scenarios --model fake",
+  "status_profile": "normal",
+  "graph_variant": "original",
+  "model": "none (Part 1 has no model)",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 15060,
+      "user_id": "demo-user-a",
+      "thread_id": "s03",
+      "trace": {
+        "graph_variant": "original",
+        "input": {
+          "message": "My laptop screen is broken."
+        },
+        "route": [
+          "START",
+          "read_request",
+          "other_help",
+          "END"
+        ],
+        "steps": [
+          {
+            "node": "read_request",
+            "update": {
+              "topics": [],
+              "category": "other"
+            },
+            "state_after": {
+              "message": "My laptop screen is broken.",
+              "topics": [],
+              "category": "other"
+            }
+          },
+          {
+            "node": "other_help",
+            "update": {
+              "reply": "I can only help with Wi-Fi and password problems in this demo. Does your problem concern Wi-Fi or a password?"
+            },
+            "state_after": {
+              "message": "My laptop screen is broken.",
+              "topics": [],
+              "category": "other",
+              "reply": "I can only help with Wi-Fi and password problems in this demo. Does your problem concern Wi-Fi or a password?"
+            }
+          }
+        ],
+        "final_state": {
+          "message": "My laptop screen is broken.",
+          "topics": [],
+          "category": "other",
+          "reply": "I can only help with Wi-Fi and password problems in this demo. Does your problem concern Wi-Fi or a password?"
+        },
+        "reply": "I can only help with Wi-Fi and password problems in this demo. Does your problem concern Wi-Fi or a password?"
+      }
+    }
+  ],
+  "final_reply": "I can only help with Wi-Fi and password problems in this demo. Does your problem concern Wi-Fi or a password?",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}

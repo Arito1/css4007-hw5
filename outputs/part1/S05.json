@@ -1,0 +1,77 @@
+{
+  "scenario": "S05",
+  "title": "Two topics after adding clarification",
+  "part": 1,
+  "command": "python -m helpdesk scenarios --model fake",
+  "status_profile": "normal",
+  "graph_variant": "with_clarification",
+  "model": "none (Part 1 has no model)",
+  "events": [
+    {
+      "action": "message",
+      "process_pid": 15060,
+      "user_id": "demo-user-a",
+      "thread_id": "s05",
+      "trace": {
+        "graph_variant": "with_clarification",
+        "input": {
+          "message": "My Wi-Fi password does not work."
+        },
+        "route": [
+          "START",
+          "read_request",
+          "clarify_problem",
+          "END"
+        ],
+        "steps": [
+          {
+            "node": "read_request",
+            "update": {
+              "topics": [
+                "wifi",
+                "password"
+              ],
+              "category": "multiple"
+            },
+            "state_after": {
+              "message": "My Wi-Fi password does not work.",
+              "topics": [
+                "wifi",
+                "password"
+              ],
+              "category": "multiple"
+            }
+          },
+          {
+            "node": "clarify_problem",
+            "update": {
+              "reply": "Your message mentions both Wi-Fi and a password. Is the problem connecting to Wi-Fi, or recovering your account password? Which one should we solve first?"
+            },
+            "state_after": {
+              "message": "My Wi-Fi password does not work.",
+              "topics": [
+                "wifi",
+                "password"
+              ],
+              "category": "multiple",
+              "reply": "Your message mentions both Wi-Fi and a password. Is the problem connecting to Wi-Fi, or recovering your account password? Which one should we solve first?"
+            }
+          }
+        ],
+        "final_state": {
+          "message": "My Wi-Fi password does not work.",
+          "topics": [
+            "wifi",
+            "password"
+          ],
+          "category": "multiple",
+          "reply": "Your message mentions both Wi-Fi and a password. Is the problem connecting to Wi-Fi, or recovering your account password? Which one should we solve first?"
+        },
+        "reply": "Your message mentions both Wi-Fi and a password. Is the problem connecting to Wi-Fi, or recovering your account password? Which one should we solve first?"
+      }
+    }
+  ],
+  "final_reply": "Your message mentions both Wi-Fi and a password. Is the problem connecting to Wi-Fi, or recovering your account password? Which one should we solve first?",
+  "ticket_files": [],
+  "loop_limit_reached": false
+}
